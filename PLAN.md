@@ -1,76 +1,60 @@
-# Issue #148 Solution Plan
+## Solution plan
 
-## Problem
+**Issue:** [Skill extractor fails to detect JavaScript and TypeScript](https://github.com/ascherj/pathreview/issues/148)
 
-`SkillExtractor` does not reliably identify JavaScript or TypeScript from source-like text. It also misses Docker when the input contains recognizable Dockerfile or Compose syntax without the literal word `docker`.
+### Understand
 
-The four focused unit tests currently fail:
+`SkillExtractor._detect_languages()` checks JavaScript and TypeScript extensions only in the optional `filename` argument. It does not recognize `.js`, `.ts`, or `.tsx` filenames mentioned in the input text, explicit JavaScript/TypeScript language names, or common syntax such as `const`, arrow functions, and TypeScript interfaces. As a result, clear JavaScript text produces no language detection, while `.tsx` text can produce only the separate React framework detection.
 
-- `test_javascript_detection`
-- `test_text_with_typescript_files`
-- `test_devops_tool_detection`
-- `test_docker_compose_detection`
+Docker has a related gap: `_detect_tools()` recognizes Docker only when the literal substring `docker` appears. Dockerfile instructions and Docker Compose YAML are therefore missed when that word is absent.
 
-## Goals
+Expected behavior is to return JavaScript or TypeScript for strong language evidence and Docker for recognizable Dockerfile or Compose syntax. Actual behavior is that the four focused tests return no matching language/tool detection.
 
-- Detect JavaScript from common syntax and `.js`/`.jsx` filenames found either in the optional `filename` argument or in text.
-- Detect TypeScript from explicit language references, `.ts`/`.tsx` filenames, and TypeScript-specific syntax.
-- Prefer TypeScript over JavaScript when TypeScript evidence is present, while allowing framework detections such as React to coexist.
-- Detect Docker from strong Dockerfile and Docker Compose syntax.
-- Preserve existing Python, framework, database, cloud, and tool detection behavior.
-- Return clear evidence and bounded confidence scores for every new detection path.
+### Map
 
-## Non-goals
+The relevant code path begins at `SkillExtractor.extract_skills()` and delegates to:
 
-- Building a general-purpose parser or AST-based language classifier.
-- Expanding detection to unrelated languages or tools.
-- Changing the `SkillDetection` data model or public `extract_skills()` API.
+- `SkillExtractor._detect_languages()` for JavaScript and TypeScript.
+- `SkillExtractor._detect_react()` for the React result seen with `.tsx`.
+- `SkillExtractor._detect_tools()` for Docker.
 
-## Implementation Steps
+Files expected to change:
 
-1. Expand the focused tests in `tests/unit/test_skill_extractor.py`.
-   - Add the issue's prose examples containing `index.js`, `app.tsx`, `types.ts`, and the word `TypeScript`.
-   - Cover optional filenames (`filename="index.js"` and `filename="app.tsx"`).
-   - Assert that TypeScript is detected independently of React.
-   - Add negative or ambiguity cases so ordinary prose and Python `async`/`import` usage do not become JavaScript false positives.
-   - Keep the existing Dockerfile and Compose regression cases.
+- `ingestion/parsers/skill_extractor.py`
+- `tests/unit/test_skill_extractor.py`
+- `JOURNAL.md` for implementation and validation notes, if required
 
-2. Refine language detection in `ingestion/parsers/skill_extractor.py`.
-   - Separate JavaScript and TypeScript evidence collection.
-   - Recognize file extensions with boundary-aware regular expressions in both `filename` and text; check `.tsx`/`.ts` before `.jsx`/`.js`.
-   - Recognize explicit language names.
-   - Add TypeScript-specific indicators such as `interface`, `type`, typed declarations, and TypeScript utility/generic syntax.
-   - Add JavaScript indicators such as variable declarations, arrow functions, CommonJS calls, and JavaScript-specific filenames.
-   - Require sufficiently strong or combined evidence for ambiguous keywords such as `async`, `await`, `class`, and `import`.
-   - Preserve evidence strings and compute confidence consistently.
+### Plan
 
-3. Add structured Docker detection in `ingestion/parsers/skill_extractor.py`.
-   - Recognize Dockerfile instruction lines such as `FROM`, `RUN`, `COPY`, `CMD`, `ENTRYPOINT`, and `EXPOSE`.
-   - Recognize Compose structure from a combination of YAML keys such as `services`, `image`, `build`, `ports`, and `volumes`.
-   - Require multiple Compose indicators to reduce false positives from generic YAML.
-   - Continue supporting the current literal tool-name lookup.
+1. Add focused regression cases for the issue examples, optional `.js`/`.ts`/`.tsx` filenames, TypeScript-with-React behavior, and ambiguous inputs that should not create false positives.
+2. Separate JavaScript and TypeScript evidence collection, recognize boundary-safe extensions and explicit language names in both text and `filename`, and add syntax indicators with thresholds for ambiguous shared keywords.
+3. Add Dockerfile and Docker Compose syntax detection, requiring multiple Compose indicators so generic YAML is not mislabeled.
+4. Run the four focused tests, the full skill-extractor test module, the broader unit suite, and manual checks of the two issue examples.
 
-4. Validate the change.
-   - Run the four focused regression tests first.
-   - Run the complete `tests/unit/test_skill_extractor.py` module.
-   - Run the broader unit test suite if the focused module passes.
-   - Manually run the two examples from the issue and inspect detection names, categories, confidence, and evidence.
+### Inputs & outputs
 
-## Files Expected to Change
+The fix takes the existing `extract_skills(text: str, filename: Optional[str] = None)` inputs:
 
-- `ingestion/parsers/skill_extractor.py`: language and Docker detection logic.
-- `tests/unit/test_skill_extractor.py`: regression, filename, precedence, and false-positive coverage.
-- `JOURNAL.md`: implementation/testing notes if required by the project workflow.
+- Free-form source code or documentation text.
+- An optional filename.
 
-## Risks and Mitigations
+It should continue returning a confidence-sorted `list[SkillDetection]`. Clear JavaScript input should include a `JavaScript` language detection; clear TypeScript input should include `TypeScript` even when React is also detected; Dockerfile or Compose syntax should include a `Docker` tool detection. Each result should retain meaningful evidence and a confidence value from `0.0` to `1.0`.
 
-- **False positives from shared syntax:** Python and JavaScript both use `import`, `async`, `await`, and `class`. Use language-specific patterns and combined evidence rather than treating shared keywords as conclusive.
-- **Extension substring matches:** Text such as `.json` or longer words could accidentally match short extensions. Use boundary-aware patterns and longest-extension-first checks.
-- **TypeScript reported only as JavaScript:** Evaluate TypeScript evidence first and keep separate detection keys. Decide through tests whether strong TypeScript evidence should suppress a redundant JavaScript result.
-- **Compose keys are generic YAML:** Require a `services` block plus one or more service-level Compose keys instead of matching a single key.
-- **Existing typo in an unrelated database test:** `test_database_technology_detection` references `skill_names` before assignment. Do not fold that unrelated repair into this issue unless it blocks suite validation; report it separately if encountered.
+### Risks & unknowns
 
-## Open Questions
+- Python and JavaScript share keywords such as `import`, `async`, `await`, and `class`, so weak single-keyword matching could create false positives.
+- Short extension substrings could match unrelated text unless patterns use boundaries and check longer extensions first.
+- Compose keys such as `services`, `build`, and `ports` can occur in generic YAML, so detection needs combined evidence.
+- It is not yet confirmed whether TypeScript input should also return the broader `JavaScript` skill. The proposed default is to return TypeScript plus independent framework detections, without a redundant JavaScript result.
+- Existing tests expect Compose syntax to map to `Docker`, not a separate `Docker Compose` skill; the initial fix will preserve that expectation.
 
-- Should TypeScript input return both `TypeScript` and `JavaScript`, or only the more specific TypeScript detection? The safest initial behavior is TypeScript plus independent framework detections, without a redundant JavaScript result, unless existing product expectations say otherwise.
-- Should Docker Compose receive its own skill name or continue mapping to `Docker`? Existing tests expect Docker, so the initial fix should retain `Docker` and record Compose syntax as evidence.
+### Edge cases
+
+- Empty text and missing filenames.
+- Uppercase or mixed-case language names and file extensions.
+- `.tsx` input that should detect both TypeScript and React.
+- `.jsx` input that should detect JavaScript and may detect React when React-specific evidence exists.
+- Python containing `import`, `async`, `await`, or `class` without JavaScript-specific evidence.
+- Prose that mentions a filename without containing source code.
+- Generic YAML containing only one Compose-like key.
+- Inputs containing both JavaScript and TypeScript evidence.

@@ -17,21 +17,16 @@ The skill extractor currently misses JavaScript skills even when input text cont
 
 **Cohort ledger:** [x] Issue added to cohort ledger
 
-## Reproduction - Issue #148
+## Week 8 — Reproduction & solution planning
 
-**Date:** 2026-07-26
+**Reproduction commit link:** [d83e14f](https://github.com/HungH206/pathreview-u7hung/commit/d83e14fbf466fed831574b93feb64e066bf8bacb)
 
-I reproduced the reported skill-extraction failures from the repository root with:
+**Reproduction summary:**
+I ran the four focused skill-extractor tests with the repository's virtual environment. All four failed: JavaScript and TypeScript were not detected from representative syntax, and Docker was not detected from Dockerfile or Compose syntax.
 
-```powershell
-.\.venv\Scripts\python.exe -m pytest -q tests/unit/test_skill_extractor.py -k "javascript_detection or text_with_typescript_files or devops_tool_detection or docker_compose_detection"
-```
+**PLAN.md link:** [Solution plan](https://github.com/HungH206/pathreview-u7hung/blob/fix/148-detect-javascript-typescript/PLAN.md)
 
-**Observed result:** 4 failed, 14 deselected.
+**Walkthrough video (recommended):**
 
-- `test_javascript_detection`: JavaScript syntax using `const` and `require(...)` returns no JavaScript detection.
-- `test_text_with_typescript_files`: TypeScript syntax using `interface`, typed fields, and `Promise<User>` returns no TypeScript detection.
-- `test_devops_tool_detection`: Dockerfile instructions (`FROM`, `RUN`, and `EXPOSE`) return no Docker detection.
-- `test_docker_compose_detection`: Compose YAML (`version`, `services`, `build`, and `ports`) returns no Docker detection.
-
-The gap lives in `ingestion/parsers/skill_extractor.py`. `_detect_languages()` checks `.js` and `.ts` only in the optional `filename` argument, not filenames mentioned in `text`, and its text patterns do not cover common JavaScript or TypeScript syntax. `_detect_tools()` detects Docker only when the literal substring `docker` appears, so Dockerfile and Compose syntax are not recognized.
+**Blockers or open questions:**
+Should strong TypeScript input return only `TypeScript`, or both `TypeScript` and the broader `JavaScript` skill? The current plan proposes TypeScript plus independent framework detections without a redundant JavaScript result.
