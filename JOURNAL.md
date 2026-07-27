@@ -27,6 +27,7 @@ I ran the four focused skill-extractor tests with the repository's virtual envir
 **PLAN.md link:** [Solution plan](https://github.com/HungH206/pathreview-u7hung/blob/fix/148-detect-javascript-typescript/PLAN.md)
 
 **Walkthrough video (recommended):**
+(https://www.youtube.com/watch?v=I0VfAJEpTng)
 
 **Blockers or open questions:**
 Should strong TypeScript input return only `TypeScript`, or both `TypeScript` and the broader `JavaScript` skill? The current plan proposes TypeScript plus independent framework detections without a redundant JavaScript result.
