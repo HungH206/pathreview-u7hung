@@ -24,12 +24,64 @@ Files expected to change:
 - `tests/unit/test_skill_extractor.py`
 - `JOURNAL.md` for implementation and validation notes, if required
 
+### File implementation checklist
+
+- [X] `ingestion/parsers/skill_extractor.py`
+  - [X] Update `_detect_languages()` to detect JavaScript and TypeScript from text and filenames.
+  - [X] Add boundary-safe extension, explicit language-name, and syntax evidence.
+  - [X] Apply evidence thresholds that avoid ambiguous-language false positives.
+  - [X] Update `_detect_tools()` to recognize Dockerfile and Docker Compose syntax.
+  - [X] Preserve confidence sorting and meaningful detection evidence.
+
+- [ ] `tests/unit/test_skill_extractor.py`
+  - [ ] Add JavaScript and TypeScript regression tests.
+  - [ ] Add `.js`, `.jsx`, `.ts`, and `.tsx` filename tests.
+  - [ ] Add TypeScript-with-React behavior tests.
+  - [ ] Add Dockerfile and Docker Compose detection tests.
+  - [ ] Add ambiguous source-code and generic-YAML false-positive tests.
+  - [ ] Verify evidence, confidence bounds, and result ordering where relevant.
+
+- [ ] `JOURNAL.md`
+  - [ ] Record the detection approach and important implementation decisions.
+  - [ ] Record focused, module-level, and broader unit-test results.
+  - [ ] Record manual validation of the issue examples.
+
 ### Plan
 
-1. Add focused regression cases for the issue examples, optional `.js`/`.ts`/`.tsx` filenames, TypeScript-with-React behavior, and ambiguous inputs that should not create false positives.
-2. Separate JavaScript and TypeScript evidence collection, recognize boundary-safe extensions and explicit language names in both text and `filename`, and add syntax indicators with thresholds for ambiguous shared keywords.
-3. Add Dockerfile and Docker Compose syntax detection, requiring multiple Compose indicators so generic YAML is not mislabeled.
-4. Run the four focused tests, the full skill-extractor test module, the broader unit suite, and manual checks of the two issue examples.
+- [X] Add focused regression tests in `tests/unit/test_skill_extractor.py`.
+  - [X] Cover the JavaScript issue example.
+  - [X] Cover the TypeScript issue example.
+  - [X] Cover Dockerfile syntax without the literal word `docker`.
+  - [X] Cover Docker Compose syntax without the literal word `docker`.
+  - [X]Cover optional `.js`, `.ts`, and `.tsx` filenames.
+  - [X] Verify `.tsx` detects both TypeScript and React.
+  - [X] Add ambiguous JavaScript/Python inputs that must not produce false positives.
+  - [X] Add generic YAML with insufficient Compose evidence that must not detect Docker.
+
+- [ ] Improve JavaScript and TypeScript detection in `SkillExtractor._detect_languages()`.
+  - [ ] Collect JavaScript and TypeScript evidence independently.
+  - [ ] Recognize boundary-safe `.js`, `.jsx`, `.ts`, and `.tsx` extensions in text.
+  - [ ] Recognize those extensions in the optional `filename`.
+  - [ ] Recognize explicit JavaScript and TypeScript language names case-insensitively.
+  - [ ] Add strong JavaScript syntax indicators such as `const` and arrow functions.
+  - [ ] Add strong TypeScript syntax indicators such as interfaces and type annotations.
+  - [ ] Require combined evidence for ambiguous shared keywords.
+  - [ ] Keep TypeScript results distinct instead of adding a redundant JavaScript result.
+  - [ ] Preserve meaningful evidence and confidence values between `0.0` and `1.0`.
+
+- [ ] Improve Docker detection in `SkillExtractor._detect_tools()`.
+  - [ ] Detect recognizable Dockerfile instruction patterns.
+  - [ ] Detect Docker Compose YAML from multiple supporting indicators.
+  - [ ] Avoid labeling generic YAML as Docker from a single common key.
+  - [ ] Continue returning the existing `Docker` tool skill for Compose input.
+
+- [ ] Validate the implementation.
+  - [ ] Run the four focused issue regression tests.
+  - [ ] Run the full `tests/unit/test_skill_extractor.py` module.
+  - [ ] Run the broader unit test suite.
+  - [ ] Manually check both issue examples.
+  - [ ] Confirm results remain confidence-sorted.
+  - [ ] Record implementation and validation notes in `JOURNAL.md`, if required.
 
 ### Inputs & outputs
 
