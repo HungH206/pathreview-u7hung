@@ -105,7 +105,7 @@ class SkillExtractor:
         "ansible": 0.85,
     }
 
-    # Extract skills from text while allowing callers to omit the filename.
+    # This function extracts skills from text while allowing callers to omit the filename.
     def extract_skills(self, text: str, filename: str | None = None) -> list[SkillDetection]:
         """
         Extract skills from source code or documentation text.

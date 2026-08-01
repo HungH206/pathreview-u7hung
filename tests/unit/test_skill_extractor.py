@@ -43,7 +43,7 @@ class TestSkillExtractor:
         # Should still detect Python despite no imports
         assert any("python" in s.lower() for s in skill_names)
 
-    # Verify TypeScript detection without adding a redundant JavaScript result.
+    # this function verifies TypeScript detection without adding a redundant JavaScript result.
     def test_text_with_typescript_files(self, extractor: SkillExtractor) -> None:
         """Cover the issue's TypeScript interface and annotation example."""
         text = """
@@ -229,7 +229,7 @@ class TestSkillExtractor:
         # Filename should provide Python hint
         assert any("python" in s.lower() for s in skill_names)
 
-    # Verify the JavaScript example that originally reproduced issue #148.
+    # this function verifies the JavaScript example that originally reproduced issue #148.
     def test_javascript_detection(self, extractor: SkillExtractor) -> None:
         """Cover the issue's JavaScript declaration and CommonJS example."""
         text = """

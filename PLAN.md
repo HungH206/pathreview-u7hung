@@ -33,13 +33,13 @@ Files expected to change:
   - [X] Update `_detect_tools()` to recognize Dockerfile and Docker Compose syntax.
   - [X] Preserve confidence sorting and meaningful detection evidence.
 
-- [ ] `tests/unit/test_skill_extractor.py`
-  - [ ] Add JavaScript and TypeScript regression tests.
-  - [ ] Add `.js`, `.jsx`, `.ts`, and `.tsx` filename tests.
-  - [ ] Add TypeScript-with-React behavior tests.
-  - [ ] Add Dockerfile and Docker Compose detection tests.
-  - [ ] Add ambiguous source-code and generic-YAML false-positive tests.
-  - [ ] Verify evidence, confidence bounds, and result ordering where relevant.
+- [X] `tests/unit/test_skill_extractor.py`
+  - [X] Add JavaScript and TypeScript regression tests.
+  - [X] Add `.js`, `.jsx`, `.ts`, and `.tsx` filename tests.
+  - [X] Add TypeScript-with-React behavior tests.
+  - [X] Add Dockerfile and Docker Compose detection tests.
+  - [X] Add ambiguous source-code and generic-YAML false-positive tests.
+  - [X] Verify evidence, confidence bounds, and result ordering where relevant.
 
 - [ ] `JOURNAL.md`
   - [ ] Record the detection approach and important implementation decisions.
@@ -58,29 +58,29 @@ Files expected to change:
   - [X] Add ambiguous JavaScript/Python inputs that must not produce false positives.
   - [X] Add generic YAML with insufficient Compose evidence that must not detect Docker.
 
-- [ ] Improve JavaScript and TypeScript detection in `SkillExtractor._detect_languages()`.
-  - [ ] Collect JavaScript and TypeScript evidence independently.
-  - [ ] Recognize boundary-safe `.js`, `.jsx`, `.ts`, and `.tsx` extensions in text.
-  - [ ] Recognize those extensions in the optional `filename`.
-  - [ ] Recognize explicit JavaScript and TypeScript language names case-insensitively.
-  - [ ] Add strong JavaScript syntax indicators such as `const` and arrow functions.
-  - [ ] Add strong TypeScript syntax indicators such as interfaces and type annotations.
-  - [ ] Require combined evidence for ambiguous shared keywords.
-  - [ ] Keep TypeScript results distinct instead of adding a redundant JavaScript result.
-  - [ ] Preserve meaningful evidence and confidence values between `0.0` and `1.0`.
+- [X] Improve JavaScript and TypeScript detection in `SkillExtractor._detect_languages()`.
+  - [X] Collect JavaScript and TypeScript evidence independently.
+  - [X] Recognize boundary-safe `.js`, `.jsx`, `.ts`, and `.tsx` extensions in text.
+  - [X] Recognize those extensions in the optional `filename`.
+  - [X] Recognize explicit JavaScript and TypeScript language names case-insensitively.
+  - [X] Add strong JavaScript syntax indicators such as `const` and arrow functions.
+  - [X] Add strong TypeScript syntax indicators such as interfaces and type annotations.
+  - [X] Require combined evidence for ambiguous shared keywords.
+  - [X] Keep TypeScript results distinct instead of adding a redundant JavaScript result.
+  - [X] Preserve meaningful evidence and confidence values between `0.0` and `1.0`.
 
-- [ ] Improve Docker detection in `SkillExtractor._detect_tools()`.
-  - [ ] Detect recognizable Dockerfile instruction patterns.
-  - [ ] Detect Docker Compose YAML from multiple supporting indicators.
-  - [ ] Avoid labeling generic YAML as Docker from a single common key.
-  - [ ] Continue returning the existing `Docker` tool skill for Compose input.
+- [X] Improve Docker detection in `SkillExtractor._detect_tools()`.
+  - [X] Detect recognizable Dockerfile instruction patterns.
+  - [X] Detect Docker Compose YAML from multiple supporting indicators.
+  - [X] Avoid labeling generic YAML as Docker from a single common key.
+  - [X] Continue returning the existing `Docker` tool skill for Compose input.
 
-- [ ] Validate the implementation.
-  - [ ] Run the four focused issue regression tests.
-  - [ ] Run the full `tests/unit/test_skill_extractor.py` module.
-  - [ ] Run the broader unit test suite.
-  - [ ] Manually check both issue examples.
-  - [ ] Confirm results remain confidence-sorted.
+- [X] Validate the implementation.
+  - [X] Run the four focused issue regression tests.
+  - [X] Run the full `tests/unit/test_skill_extractor.py` module.
+  - [X] Run the broader unit test suite.
+  - [X] Manually check both issue examples.
+  - [X] Confirm results remain confidence-sorted.
   - [ ] Record implementation and validation notes in `JOURNAL.md`, if required.
 
 ### Inputs & outputs
