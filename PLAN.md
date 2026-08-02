@@ -41,10 +41,10 @@ Files expected to change:
   - [X] Add ambiguous source-code and generic-YAML false-positive tests.
   - [X] Verify evidence, confidence bounds, and result ordering where relevant.
 
-- [ ] `JOURNAL.md`
-  - [ ] Record the detection approach and important implementation decisions.
-  - [ ] Record focused, module-level, and broader unit-test results.
-  - [ ] Record manual validation of the issue examples.
+- [x] `JOURNAL.md`
+  - [x] Record the detection approach and important implementation decisions.
+  - [x] Record focused, module-level, and broader unit-test results.
+  - [x] Record manual validation of the issue examples.
 
 ### Plan
 
@@ -81,7 +81,7 @@ Files expected to change:
   - [X] Run the broader unit test suite.
   - [X] Manually check both issue examples.
   - [X] Confirm results remain confidence-sorted.
-  - [ ] Record implementation and validation notes in `JOURNAL.md`, if required.
+  - [X] Record implementation and validation notes in `JOURNAL.md`, if required.
 
 ### Inputs & outputs
 

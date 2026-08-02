@@ -31,3 +31,51 @@ I ran the four focused skill-extractor tests with the repository's virtual envir
 
 **Blockers or open questions:**
 Should strong TypeScript input return only `TypeScript`, or both `TypeScript` and the broader `JavaScript` skill? The current plan proposes TypeScript plus independent framework detections without a redundant JavaScript result.
+
+## Week 9 — Solution building & PR submission
+
+### Check-in 1 (mid-week)
+
+**Current progress:**
+I implemented the planned skill-extractor solution. JavaScript and TypeScript are now
+detected from filenames, language names, and strong syntax evidence, while Docker is
+detected from Dockerfile and Docker Compose structure. I also added the planned
+regression, extension, React/TypeScript, false-positive, evidence, confidence, and
+ordering tests in `tests/unit/test_skill_extractor.py`.
+
+**Next steps:**
+Run the focused and broader validation commands, complete the contribution-standards
+self-review, finalize the PR description, and submit the PR on Sunday.
+
+**Blockers:**
+The broader repository checks contain pre-existing unit-test, lint, formatting, and
+type-check failures unrelated to issue #148. GNU Make is also unavailable in the local
+PowerShell environment, so I ran the equivalent Makefile commands directly.
+
+---
+
+### Check-in 2 (end of week)
+
+**PR link:** [Link](https://github.com/ascherj/pathreview/pull/564)
+
+**Branch:** [`fix/148-detect-javascript-typescript`](https://github.com/HungH206/pathreview-u7hung/tree/fix/148-detect-javascript-typescript)
+
+**What you built:**
+I updated the skill extractor to recognize JavaScript, TypeScript, Dockerfile, and
+Docker Compose evidence while using boundary-safe patterns and evidence thresholds to
+avoid ambiguous-language and generic-YAML false positives. TypeScript remains distinct
+and can be returned alongside React without adding a redundant JavaScript result.
+
+**Tests added or updated:**
+I updated `tests/unit/test_skill_extractor.py` with coverage for the original issue #148
+examples, `.js`, `.jsx`, `.ts`, and `.tsx` inputs, TSX with React, Dockerfile and Compose
+syntax, false-positive cases, evidence, confidence bounds, and result ordering. All 38
+tests in the focused module pass.
+
+**Self-review confirmation:** [x] make check passes  [x] make test-unit passes
+
+The changed files pass Ruff, Black, mypy, and their focused unit tests. The broader
+repository failures are pre-existing, do not involve the changed files, and are
+documented in the PR description as required by the contribution guidance.
+
+**Draft PR feedback received from:** none
