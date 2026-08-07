@@ -79,3 +79,51 @@ repository failures are pre-existing, do not involve the changed files, and are
 documented in the PR description as required by the contribution guidance.
 
 **Draft PR feedback received from:** none
+
+
+## Week 10 — Iteration & reflection
+
+### Reviewer feedback
+
+**Feedback received:** [ ] Yes  [X] No — still awaiting review
+
+**Summary of feedback:**
+[What did reviewers comment on? Or note that no review came in.]
+
+No reviews has came in for the solution I've implemented in issue #148.
+
+
+**How you responded:**
+[What changes did you make, or what did you reply? If no feedback,
+leave blank.]
+
+---
+
+### Reflection
+
+**What was harder than you expected?**
+[Be specific — what part of the process, codebase, or workflow
+surprised you?]
+
+The open source contibution process has been a very challenging aspect I encountered. I had to learn how to navigate the codebase, understand the existing code, and figure out how to make changes without breaking anything. Additionally, understanding the contribution guidelines and ensuring that my changes met all the requirements was more time-consuming than I anticipated. Nevertheless, It was a fun experience to start contributing to open-source projects, and learn more about how to work on an issue when contribute.
+
+
+
+**What did you learn about working in a large codebase?**
+[What's different about contributing to someone else's production code
+vs. building your own project?]
+
+I learned to read and understand the scope of development that I'll be test on, the code that related to the issues, the proper way to construct the code and the best way to report/document your work. Work with large codebase with guiding context help me see that there're more problems within that codebase that can be discoverable and help me create an opportunity of OSS contribution.
+
+**How did AI tools help — and where did they fall short?**
+[Where was AI assistance most useful this module? Where did you need
+to go beyond what AI could give you?]
+
+The AI tools helped Identlify the functions that has been affected in failed testcases, simplify the process of fising 
+
+**What would you do differently if you started over?**
+[Issue selection, planning, implementation, or process — anything
+you'd change?]
+
+**What are you most proud of from this module?**
+[One thing — it doesn't have to be the PR itself.]
