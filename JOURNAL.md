@@ -90,7 +90,7 @@ documented in the PR description as required by the contribution guidance.
 **Summary of feedback:**
 [What did reviewers comment on? Or note that no review came in.]
 
-No reviews has came in for the solution I've implemented in issue #148.
+No reviews have come in for the solution I've implemented in issue #148. My PR is 564 for the solutions
 
 
 **How you responded:**
@@ -119,11 +119,19 @@ I learned to read and understand the scope of development that I'll be test on, 
 [Where was AI assistance most useful this module? Where did you need
 to go beyond what AI could give you?]
 
-The AI tools helped Identlify the functions that has been affected in failed testcases, simplify the process of fising 
+The AI tools helped Identlify the functions that have been affected in failed test cases and simplify the process of finding the file relation to any unit tests in the modules. It given me a guide to test for issue reproduction and verify whether my implementation approach in the PLAN.MD missing anything crucial to the issue.
 
 **What would you do differently if you started over?**
 [Issue selection, planning, implementation, or process — anything
 you'd change?]
 
+1/ Compare issue tier to see if the level to work on the project is coordinated for my skills. I would love to do a tier 2 issue.
+ 
+2/ Utilize AI to understand the test files to files relationship, test commands for problem reproductions.
+
+3/ Initially write out a plan, allow AI to check for missing details or wrong logic.
+
 **What are you most proud of from this module?**
 [One thing — it doesn't have to be the PR itself.]
+
+I'm proud that I have explored different topics about AI in this course (RAG, Agentic AI, Fine-tune techniques,...). I'm proud of myself to take on my skills development and collaboration to the next level with enthusiasm for open-source contributions. I've learned how to contribute to any tech issues effectively. Open-source contributions on this project have allowed me to be adaptive to any coding environment, whether if the contribution is big or small.
